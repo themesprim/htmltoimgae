@@ -109,9 +109,12 @@ func convertHTMLToImage(c *fiber.Ctx, ctx context.Context) error {
 		req.Quality = 90
 	}
 
-	// Create a new context with timeout
-	timeoutCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	ctx, cancel := chromedp.NewContext(context.Background())
 	defer cancel()
+
+	// Create a new context with timeout
+	timeoutCtx, timeoutCancel := context.WithTimeout(ctx, 30*time.Second)
+	defer timeoutCancel()
 
 	var buf []byte
 
